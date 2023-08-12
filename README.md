@@ -1,8 +1,19 @@
 # Chicken Pi
 
-Dieses Projekt ist der Code von "Chicken Pi", als Digitalisierung eines Hühnerstalls.
+Dieses Projekt ist der aktuelle Stand von "Chicken Pi", als Digitalisierung eines Hühnerstalls inkl. Integration ins Smart Home.
 Weitere Informationen auf https://360friends.de/tag/chicken-pi/
 
 ## Installation
 
-Starte `install.sh`
+Installation via `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/lochmueller/chicken-pi/main/install.sh)"` auf einem Raspberry Pi.
+
+## Benutzung
+
+Beispiele:
+
+`curl http://192.168.178.106:5000/light`
+`curl http://192.168.178.106:5000/light -X POST`
+
+## Dev
+
+`ssh chicken.local`                      
