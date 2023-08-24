@@ -5,4 +5,4 @@ sudo modprobe w1-therm
 
 DIR="$(dirname "$0")"
 cd $DIR
-FLASK_APP=main nohup flask run -h 0.0.0.0 > logs/flask.txt 2>&1 &
+nohup flask run -h 0.0.0.0 > logs/flask.txt 2>&1 &
