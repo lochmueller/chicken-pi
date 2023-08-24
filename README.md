@@ -23,5 +23,5 @@ Beispiele:
 # Idea
 
 Launcher: 
-https://stackoverflow.com/questions/36465899/how-to-run-flask-server-in-the-background 
+
 https://www.instructables.com/Raspberry-Pi-Launch-Python-script-on-startup/

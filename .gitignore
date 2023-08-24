@@ -1,2 +1,5 @@
 /.idea/
-latest.jpg
+/latest.jpg
+/__pycache__
+/logs/
+/raspinfo.txt

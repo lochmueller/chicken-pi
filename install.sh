@@ -1,15 +1,9 @@
 
-echo "Upgrade dependencies"
-sudo apt update && sudo apt-get upgrade
+echo "Update & Upgrade dependencies"
+sudo apt update && sudo apt-get -y upgrade
 
-echo "Install python3-gpiozero"
-sudo apt install python3-gpiozero
-
-echo "Install python3-picamera"
-sudo apt install python3-picamera
-
-echo "Install python3 python3-pip"
-sudo apt-get install python3 python3-pip
+echo "Install python3 python3-pip python3-gpiozero python3-picamera"
+sudo apt-get -y install python3 python3-pip python3-gpiozero python3-picamera
 
 echo "Install Flask"
 pip install Flask
@@ -21,12 +15,15 @@ echo "Switch to home"
 cd ~
 
 echo "Clone Git"
-git clone git@github.com:lochmueller/chicken-pi.git
+git clone https://github.com/lochmueller/chicken-pi.git
 
 echo "Change tp project"
 cd chicken-pi
 
-echo "Check if w1_therm is active:"
-lsmod | grep w1
+echo "Install cronjob for reboot"
+crontab -l > mycron
+echo "@reboot sh ~/chicken-pi/launcher.sh > ~/chicken-pi/logs/cronlog.txt 2>&1" >> mycron
+crontab mycron
+rm -rf crontab
 
-echo "Use this command to start the server: flask --app app run -h 0.0.0.0"
+echo "Use ~/chicken-pi/launch.sh to start flask manually!"
