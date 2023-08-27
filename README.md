@@ -12,16 +12,8 @@ Installation via `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/l
 Beispiele:
 
 `curl http://192.168.178.106:5000/light`
-`curl http://192.168.178.106:5000/light -X POST`
+`curl http://192.168.178.106:5000/light?state=on -X POST`
 
 ## Dev
 
-`ssh chicken.local`                      
-
-
-
-# Idea
-
-Launcher: 
-
-https://www.instructables.com/Raspberry-Pi-Launch-Python-script-on-startup/
+Connect to current Pi: `ssh chicken.local`

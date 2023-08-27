@@ -19,11 +19,11 @@ pip install -r requirements.txt
 
 echo "------------ Install cronjob for reboot"
 touch mycron
-echo "@reboot sh ~/chicken-pi/launcher.sh > ~/chicken-pi/logs/crontab.txt 2>&1" >> mycron
+echo "@reboot sh ~/chicken-pi/launch.sh > ~/chicken-pi/logs/crontab.txt 2>&1" >> mycron
 crontab mycron
 rm -rf mycron
 
 echo "------------ Create logs dir"
 mkdir -p logs
 
-echo "------------ Use ~/chicken-pi/launch.sh to start flask manually!"
+echo "------------ Use ~/chicken-pi/launch.sh to start flask manually or reboot!"

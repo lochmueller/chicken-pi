@@ -2,10 +2,15 @@ from flask import Flask, jsonify, send_file
 from gpiozero import LED, Button
 from picamera import PiCamera
 import subprocess
-import os, sys, time
+import os, sys
 import re
 
 app = Flask(__name__)
+
+# Configuration
+pinLed = 17
+pinLedButton = 27
+pinThermData = 4
 
 # Cam
 camera = PiCamera()
@@ -14,14 +19,30 @@ def capture():
     camera.capture('latest.jpg')
 
 # Light
-led = LED(17)
+led = LED(pinLed)
 led.off()
-button = Button(27)
+button = Button(pinLedButton)
 
 def light_toggle():
     led.toggle()
 
 button.when_pressed = light_toggle
+
+# Door
+doorState = 'open'
+def door_toggle():
+    if doorState == 'open':
+        door_closed()
+    else:
+        door_open()
+def door_open():
+    # Handle door here
+    doorState = 'open'
+    return False
+def door_closed():
+    # Handle door here
+    doorState = 'closed'
+    return False
 
 # Temperature
 def getTemperature(device: str) -> float:
@@ -39,23 +60,38 @@ def getTemperature(device: str) -> float:
 @app.route('/info', methods=['GET'])
 def get_info():
     output = subprocess.check_output("vcgencmd measure_temp | grep  -o -E '[[:digit:].]*'", shell=True)
-    return jsonify({'temperature_cpu': float(output), 'temperature_1': getTemperature('28-3ce10457589d'), 'temperature_2': getTemperature('dummy'), 'light': led.is_lit})
-
-@app.route('/light', methods=['GET'])
-def get_light():
-    return jsonify({'active': led.is_lit})
+    result = {
+        'temperature_cpu': float(output),
+        'temperature_1': getTemperature('28-3ce10457589d'),
+        'temperature_2': getTemperature('dummy'),
+        'light': 'on' if led.is_lit else 'off',
+        'door': doorState
+    }
+    return jsonify(result)
 
 @app.route('/light', methods=['POST'])
 def post_light():
-    light_toggle()
+    newState = request.args.get('state', '')
+    if newState == 'on':
+        led.on()
+    elif newState == 'off':
+        led.off()
+    else:
+        light_toggle()
+    return '', 204
+
+@app.route('/door', methods=['POST'])
+def post_door():
+    newState = request.args.get('state', '')
+    if newState == 'open':
+        door_open()
+    elif newState == 'closed':
+        door_closed()
+    else:
+        door_toggle()
     return '', 204
 
 @app.route('/cam', methods=['GET'])
 def get_cam():
     capture()
     return send_file('latest.jpg', mimetype='image/jpeg')
-
-@app.route('/cam', methods=['POST'])
-def post_cam():
-    capture()
-    return '', 204
