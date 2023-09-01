@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, send_file
+from flask import Flask, jsonify, send_file, request
 from gpiozero import LED, Button
 from picamera import PiCamera
 import subprocess
@@ -63,7 +63,7 @@ def get_info():
     result = {
         'temperature_cpu': float(output),
         'temperature_1': getTemperature('28-3ce10457589d'),
-        'temperature_2': getTemperature('dummy'),
+        'temperature_2': getTemperature('28-3ce10457601d'),
         'light': 'on' if led.is_lit else 'off',
         'door': doorState
     }
@@ -71,7 +71,7 @@ def get_info():
 
 @app.route('/light', methods=['POST'])
 def post_light():
-    newState = request.args.get('state', '')
+    newState = request.args.get('state', 'toggle')
     if newState == 'on':
         led.on()
     elif newState == 'off':
@@ -82,7 +82,7 @@ def post_light():
 
 @app.route('/door', methods=['POST'])
 def post_door():
-    newState = request.args.get('state', '')
+    newState = request.args.get('state', 'toggle')
     if newState == 'open':
         door_open()
     elif newState == 'closed':
